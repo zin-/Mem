@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mem/mem_detail.dart';
+import 'package:mem/view/index.dart';
 
 const locale = Locale("ja", "JP");
 

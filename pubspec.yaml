@@ -14,9 +14,18 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  # for Database
+  sqfentity: ^1.4.0+3
+  sqfentity_gen: ^1.2.3
+  http: ^0.13.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # for Database
+  build_runner: ^1.6.5
+  build_verify: ^1.1.0
 
 flutter:
   uses-material-design: true
