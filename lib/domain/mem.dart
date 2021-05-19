@@ -12,8 +12,8 @@ class Mem {
   Mem.fromEntity(MemTable memTable)
       : this(
           memTable.id,
-          memTable.name,
-          memTable.remarks,
+          memTable.name ?? "",
+          memTable.remarks ?? "",
         );
 
   MemTable toEntity() => MemTable.withId(
@@ -22,4 +22,10 @@ class Mem {
         remarks,
         false,
       );
+
+  String toString() => "Mem("
+      "id: $id"
+      ", name: $name"
+      ", remarks: $remarks"
+      ")";
 }

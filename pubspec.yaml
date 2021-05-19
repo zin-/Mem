@@ -14,6 +14,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  # for manage state
+  flutter_riverpod: ^0.14.0+3
+
   # for Database
   sqfentity: ^1.4.0+3
   sqfentity_gen: ^1.2.3

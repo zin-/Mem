@@ -1,13 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mem/dimens.dart';
 
+import '../domain/mem.dart';
+
 class MemDetailBody extends StatelessWidget {
   final GlobalKey<FormState> _formKey;
+  final Mem _mem;
   final _remarksFocusNode = FocusNode();
 
-  MemDetailBody(this._formKey);
+  MemDetailBody(this._formKey, this._mem);
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class MemDetailBody extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
+            initialValue: _mem?.name ?? "",
             decoration: InputDecoration(
               labelText: "Name",
             ),
@@ -27,12 +29,18 @@ class MemDetailBody extends StatelessWidget {
               FocusScope.of(context)
                   .requestFocus(_remarksFocusNode);
             },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Name is required.";
+              }
+              return null;
+            },
             onSaved: (newValue) {
-              log(newValue);
-              // TODO update state via riverpod
+              _mem.name = newValue;
             },
           ),
           TextFormField(
+            initialValue: _mem?.remarks ?? "",
             maxLines: null,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.subject),
@@ -43,8 +51,7 @@ class MemDetailBody extends StatelessWidget {
             ),
             focusNode: _remarksFocusNode,
             onSaved: (newValue) {
-              log(newValue);
-              // TODO update state via riverpod
+              _mem.remarks = newValue;
             },
           ),
         ],
