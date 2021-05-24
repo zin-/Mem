@@ -1,4 +1,4 @@
-import 'package:mem/model/database.dart';
+import 'package:mem/database/models.dart';
 
 class Mem {
   int id;

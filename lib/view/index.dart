@@ -5,6 +5,7 @@ import 'package:mem/view/mem_detail_model.dart';
 import 'package:mem/view/body.dart';
 
 class MemDetail extends ConsumerWidget {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   final int _memId;
@@ -13,11 +14,14 @@ class MemDetail extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, watch) {
-    context.read(memDetailModelProvider) ??
-        context
-            .read(memDetailModelProvider.notifier)
-            .fetch(_memId);
+    final memDetailModel = watch(memDetailModelProvider);
+    if (memDetailModel == null) {
+      context
+          .read(memDetailModelProvider.notifier)
+          .fetch(_memId);
+    }
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
@@ -25,19 +29,25 @@ class MemDetail extends ConsumerWidget {
           child: Center(
             child: MemDetailBody(
               _formKey,
-              watch(memDetailModelProvider),
+              memDetailModel,
             ),
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save_alt),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            context
+            final savedMem = await context
                 .read(memDetailModelProvider.notifier)
                 .save();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Saved ${savedMem.name}"),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           }
         },
       ),

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'database.dart';
+part of 'models.dart';
 
 // **************************************************************************
 // SqfEntityGenerator
@@ -26,23 +26,18 @@ class TableMemTable extends SqfEntityTableBase {
     // declare properties of EntityTable
     tableName = 'memTable';
     primaryKeyName = 'id';
-    primaryKeyType =
-        PrimaryKeyType.integer_auto_incremental;
+    primaryKeyType = PrimaryKeyType.integer_auto_incremental;
     useSoftDeleting = true;
     // when useSoftDeleting is true, creates a field named 'isDeleted' on the table, and set to '1' this field when item deleted (does not hard delete)
 
     // declare fields
     fields = [
-      SqfEntityFieldBase('name', DbType.text,
-          isNotNull: false),
-      SqfEntityFieldBase('remarks', DbType.text,
-          isNotNull: false),
+      SqfEntityFieldBase('name', DbType.text, isNotNull: false),
+      SqfEntityFieldBase('remarks', DbType.text, isNotNull: false),
     ];
     super.init();
   }
-
   static SqfEntityTableBase _instance;
-
   static SqfEntityTableBase get getInstance {
     return _instance = _instance ?? TableMemTable();
   }
@@ -62,7 +57,6 @@ class MemDbModel extends SqfEntityModelProvider {
     bundledDatabasePath = memDbModel
         .bundledDatabasePath; //'assets/sample.db'; // This value is optional. When bundledDatabasePath is empty then EntityBase creats a new database when initializing the database
   }
-
   Map<String, dynamic> getControllers() {
     final controllers = <String, dynamic>{};
 
@@ -74,23 +68,16 @@ class MemDbModel extends SqfEntityModelProvider {
 // BEGIN ENTITIES
 // region MemTable
 class MemTable {
-  MemTable(
-      {this.id, this.name, this.remarks, this.isDeleted}) {
+  MemTable({this.id, this.name, this.remarks, this.isDeleted}) {
     _setDefaultValues();
   }
-
-  MemTable.withFields(
-      this.name, this.remarks, this.isDeleted) {
+  MemTable.withFields(this.name, this.remarks, this.isDeleted) {
     _setDefaultValues();
   }
-
-  MemTable.withId(
-      this.id, this.name, this.remarks, this.isDeleted) {
+  MemTable.withId(this.id, this.name, this.remarks, this.isDeleted) {
     _setDefaultValues();
   }
-
-  MemTable.fromMap(Map<String, dynamic> o,
-      {bool setDefaultValues = true}) {
+  MemTable.fromMap(Map<String, dynamic> o, {bool setDefaultValues = true}) {
     if (setDefaultValues) {
       _setDefaultValues();
     }
@@ -105,7 +92,6 @@ class MemTable {
         ? o['isDeleted'] == 1 || o['isDeleted'] == true
         : null;
   }
-
   // FIELDS (MemTable)
   int id;
   String name;
@@ -113,7 +99,6 @@ class MemTable {
   bool isDeleted;
 
   BoolResult saveResult;
-
   // end FIELDS (MemTable)
 
   static const bool _softDeleteActivated = true;
@@ -125,9 +110,7 @@ class MemTable {
 
   // METHODS
   Map<String, dynamic> toMap(
-      {bool forQuery = false,
-      bool forJson = false,
-      bool forView = false}) {
+      {bool forQuery = false, bool forJson = false, bool forView = false}) {
     final map = <String, dynamic>{};
     if (id != null) {
       map['id'] = id;
@@ -141,8 +124,7 @@ class MemTable {
     }
 
     if (isDeleted != null) {
-      map['isDeleted'] =
-          forQuery ? (isDeleted ? 1 : 0) : isDeleted;
+      map['isDeleted'] = forQuery ? (isDeleted ? 1 : 0) : isDeleted;
     }
 
     return map;
@@ -165,8 +147,7 @@ class MemTable {
     }
 
     if (isDeleted != null) {
-      map['isDeleted'] =
-          forQuery ? (isDeleted ? 1 : 0) : isDeleted;
+      map['isDeleted'] = forQuery ? (isDeleted ? 1 : 0) : isDeleted;
     }
 
     return map;
@@ -179,8 +160,7 @@ class MemTable {
 
   /// This method returns Json String [MemTable]
   Future<String> toJsonWithChilds() async {
-    return json
-        .encode(await toMapWithChildren(false, true));
+    return json.encode(await toMapWithChildren(false, true));
   }
 
   List<dynamic> toArgs() {
@@ -194,8 +174,7 @@ class MemTable {
   static Future<List<MemTable>> fromWebUrl(Uri url,
       {Map<String, String> headers}) async {
     try {
-      final response =
-          await http.get(url, headers: headers);
+      final response = await http.get(url, headers: headers);
       return await fromJson(response.body);
     } catch (e) {
       print(
@@ -204,30 +183,25 @@ class MemTable {
     }
   }
 
-  Future<http.Response> postUrl(Uri url,
-      {Map<String, String> headers}) {
+  Future<http.Response> postUrl(Uri url, {Map<String,
+      String> headers}) {
     return http.post(url, headers: headers, body: toJson());
   }
 
-  static Future<List<MemTable>> fromJson(
-      String jsonBody) async {
-    final Iterable list =
-        await json.decode(jsonBody) as Iterable;
+  static Future<List<MemTable>> fromJson(String jsonBody) async {
+    final Iterable list = await json.decode(jsonBody) as Iterable;
     var objList = <MemTable>[];
     try {
       objList = list
-          .map((memtable) => MemTable.fromMap(
-              memtable as Map<String, dynamic>))
+          .map((memtable) => MemTable.fromMap(memtable as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print(
-          'SQFENTITY ERROR MemTable.fromJson: ErrorMessage: ${e.toString()}');
+      print('SQFENTITY ERROR MemTable.fromJson: ErrorMessage: ${e.toString()}');
     }
     return objList;
   }
 
-  static Future<List<MemTable>> fromMapList(
-      List<dynamic> data,
+  static Future<List<MemTable>> fromMapList(List<dynamic> data,
       {bool preload = false,
       List<String> preloadFields,
       bool loadParents = false,
@@ -236,8 +210,7 @@ class MemTable {
     final List<MemTable> objList = <MemTable>[];
     loadedFields = loadedFields ?? [];
     for (final map in data) {
-      final obj = MemTable.fromMap(
-          map as Map<String, dynamic>,
+      final obj = MemTable.fromMap(map as Map<String, dynamic>,
           setDefaultValues: setDefaultValues);
 
       objList.add(obj);
@@ -272,8 +245,7 @@ class MemTable {
     MemTable obj;
     final data = await _mnMemTable.getById([id]);
     if (data.length != 0) {
-      obj =
-          MemTable.fromMap(data[0] as Map<String, dynamic>);
+      obj = MemTable.fromMap(data[0] as Map<String, dynamic>);
     } else {
       obj = null;
     }
@@ -306,8 +278,7 @@ class MemTable {
   /// saveAll method saves the sent List<MemTable> as a bulk in one transaction
   ///
   /// Returns a <List<BoolResult>>
-  static Future<List<dynamic>> saveAll(
-      List<MemTable> memtables) async {
+  static Future<List<dynamic>> saveAll(List<MemTable> memtables) async {
     // final results = _mnMemTable.saveAll('INSERT OR REPLACE INTO memTable (id,name, remarks,isDeleted)  VALUES (?,?,?,?)',memtables);
     // return results; removed in sqfentity_gen 1.3.0+6
     await MemDbModel().batchStart();
@@ -336,19 +307,16 @@ class MemTable {
           1) {
         saveResult = BoolResult(
             success: true,
-            successMessage:
-                'MemTable id=$id updated successfully');
+            successMessage: 'MemTable id=$id updated successfully');
       } else {
         saveResult = BoolResult(
-            success: false,
-            errorMessage: 'MemTable id=$id did not update');
+            success: false, errorMessage: 'MemTable id=$id did not update');
       }
       return id;
     } catch (e) {
       saveResult = BoolResult(
           success: false,
-          errorMessage:
-              'MemTable Save failed. Error: ${e.toString()}');
+          errorMessage: 'MemTable Save failed. Error: ${e.toString()}');
       return 0;
     }
   }
@@ -358,8 +326,7 @@ class MemTable {
   /// upsertAll() method is faster then saveAll() method. upsertAll() should be used when you are sure that the primary key is greater than zero
   ///
   /// Returns a BoolCommitResult
-  Future<BoolCommitResult> upsertAll(
-      List<MemTable> memtables) async {
+  Future<BoolCommitResult> upsertAll(List<MemTable> memtables) async {
     final results = await _mnMemTable.rawInsertAll(
         'INSERT OR REPLACE INTO memTable (id,name, remarks,isDeleted)  VALUES (?,?,?,?)',
         memtables);
@@ -369,16 +336,14 @@ class MemTable {
   /// Deletes MemTable
 
   /// <returns>BoolResult res.success=Deleted, not res.success=Can not deleted
-  Future<BoolResult> delete(
-      [bool hardDelete = false]) async {
+  Future<BoolResult> delete([bool hardDelete = false]) async {
     print('SQFENTITIY: delete MemTable invoked (id=$id)');
     if (!_softDeleteActivated || hardDelete || isDeleted) {
-      return _mnMemTable.delete(QueryParams(
-          whereString: 'id=?', whereArguments: [id]));
+      return _mnMemTable
+          .delete(QueryParams(whereString: 'id=?', whereArguments: [id]));
     } else {
       return _mnMemTable.updateBatch(
-          QueryParams(
-              whereString: 'id=?', whereArguments: [id]),
+          QueryParams(whereString: 'id=?', whereArguments: [id]),
           {'isDeleted': 1});
     }
   }
@@ -386,13 +351,11 @@ class MemTable {
   /// Recover MemTable>
 
   /// <returns>BoolResult res.success=Recovered, not res.success=Can not recovered
-  Future<BoolResult> recover(
-      [bool recoverChilds = true]) async {
+  Future<BoolResult> recover([bool recoverChilds = true]) async {
     print('SQFENTITIY: recover MemTable invoked (id=$id)');
     {
       return _mnMemTable.updateBatch(
-          QueryParams(
-              whereString: 'id=?', whereArguments: [id]),
+          QueryParams(whereString: 'id=?', whereArguments: [id]),
           {'isDeleted': 0});
     }
   }
@@ -415,9 +378,9 @@ class MemTable {
   void _setDefaultValues() {
     isDeleted = isDeleted ?? false;
   }
-// END METHODS
-// CUSTOM CODES
-/*
+  // END METHODS
+  // CUSTOM CODES
+  /*
       you must define customCode property of your SqfEntityTable constant for ex:
       const tablePerson = SqfEntityTable(
       tableName: 'person',
@@ -429,12 +392,12 @@ class MemTable {
       ],
       customCode: '''
        String fullName()
-       {
+       { 
          return '$firstName $lastName';
        }
       ''');
      */
-// END CUSTOM CODES
+  // END CUSTOM CODES
 }
 // endregion memtable
 
@@ -443,7 +406,6 @@ class MemTableField extends SearchCriteria {
   MemTableField(this.memtableFB) {
     param = DbParameter();
   }
-
   DbParameter param;
   String _waitingNot = '';
   MemTableFilterBuilder memtableFB;
@@ -456,13 +418,12 @@ class MemTableField extends SearchCriteria {
   MemTableFilterBuilder equals(dynamic pValue) {
     param.expression = '=';
     memtableFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(pValue, memtableFB.parameters, param,
-            SqlSyntax.EQuals, memtableFB._addedBlocks)
-        : setCriteria(pValue, memtableFB.parameters, param,
-            SqlSyntax.NotEQuals, memtableFB._addedBlocks);
+        ? setCriteria(pValue, memtableFB.parameters, param, SqlSyntax.EQuals,
+            memtableFB._addedBlocks)
+        : setCriteria(pValue, memtableFB.parameters, param, SqlSyntax.NotEQuals,
+            memtableFB._addedBlocks);
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
@@ -472,15 +433,10 @@ class MemTableField extends SearchCriteria {
     memtableFB._addedBlocks = _waitingNot == ''
         ? setCriteria(pValue, memtableFB.parameters, param,
             SqlSyntax.EQualsOrNull, memtableFB._addedBlocks)
-        : setCriteria(
-            pValue,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.NotEQualsOrNull,
-            memtableFB._addedBlocks);
+        : setCriteria(pValue, memtableFB.parameters, param,
+            SqlSyntax.NotEQualsOrNull, memtableFB._addedBlocks);
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
@@ -490,12 +446,10 @@ class MemTableField extends SearchCriteria {
         0,
         memtableFB.parameters,
         param,
-        SqlSyntax.IsNULL.replaceAll(
-            SqlSyntax.notKeyword, _waitingNot),
+        SqlSyntax.IsNULL.replaceAll(SqlSyntax.notKeyword, _waitingNot),
         memtableFB._addedBlocks);
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
@@ -506,12 +460,10 @@ class MemTableField extends SearchCriteria {
           '%${pValue.toString()}%',
           memtableFB.parameters,
           param,
-          SqlSyntax.Contains.replaceAll(
-              SqlSyntax.notKeyword, _waitingNot),
+          SqlSyntax.Contains.replaceAll(SqlSyntax.notKeyword, _waitingNot),
           memtableFB._addedBlocks);
       _waitingNot = '';
-      memtableFB._addedBlocks
-              .needEndBlock[memtableFB._blockIndex] =
+      memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
           memtableFB._addedBlocks.retVal;
     }
     return memtableFB;
@@ -523,15 +475,12 @@ class MemTableField extends SearchCriteria {
           '${pValue.toString()}%',
           memtableFB.parameters,
           param,
-          SqlSyntax.Contains.replaceAll(
-              SqlSyntax.notKeyword, _waitingNot),
+          SqlSyntax.Contains.replaceAll(SqlSyntax.notKeyword, _waitingNot),
           memtableFB._addedBlocks);
       _waitingNot = '';
-      memtableFB._addedBlocks
-              .needEndBlock[memtableFB._blockIndex] =
+      memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
           memtableFB._addedBlocks.retVal;
-      memtableFB._addedBlocks
-              .needEndBlock[memtableFB._blockIndex] =
+      memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
           memtableFB._addedBlocks.retVal;
     }
     return memtableFB;
@@ -543,64 +492,43 @@ class MemTableField extends SearchCriteria {
           '%${pValue.toString()}',
           memtableFB.parameters,
           param,
-          SqlSyntax.Contains.replaceAll(
-              SqlSyntax.notKeyword, _waitingNot),
+          SqlSyntax.Contains.replaceAll(SqlSyntax.notKeyword, _waitingNot),
           memtableFB._addedBlocks);
       _waitingNot = '';
-      memtableFB._addedBlocks
-              .needEndBlock[memtableFB._blockIndex] =
+      memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
           memtableFB._addedBlocks.retVal;
     }
     return memtableFB;
   }
 
-  MemTableFilterBuilder between(
-      dynamic pFirst, dynamic pLast) {
+  MemTableFilterBuilder between(dynamic pFirst, dynamic pLast) {
     if (pFirst != null && pLast != null) {
       memtableFB._addedBlocks = setCriteria(
           pFirst,
           memtableFB.parameters,
           param,
-          SqlSyntax.Between.replaceAll(
-              SqlSyntax.notKeyword, _waitingNot),
+          SqlSyntax.Between.replaceAll(SqlSyntax.notKeyword, _waitingNot),
           memtableFB._addedBlocks,
           pLast);
     } else if (pFirst != null) {
       if (_waitingNot != '') {
-        memtableFB._addedBlocks = setCriteria(
-            pFirst,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.LessThan,
-            memtableFB._addedBlocks);
+        memtableFB._addedBlocks = setCriteria(pFirst, memtableFB.parameters,
+            param, SqlSyntax.LessThan, memtableFB._addedBlocks);
       } else {
-        memtableFB._addedBlocks = setCriteria(
-            pFirst,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.GreaterThanOrEquals,
-            memtableFB._addedBlocks);
+        memtableFB._addedBlocks = setCriteria(pFirst, memtableFB.parameters,
+            param, SqlSyntax.GreaterThanOrEquals, memtableFB._addedBlocks);
       }
     } else if (pLast != null) {
       if (_waitingNot != '') {
-        memtableFB._addedBlocks = setCriteria(
-            pLast,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.GreaterThan,
-            memtableFB._addedBlocks);
+        memtableFB._addedBlocks = setCriteria(pLast, memtableFB.parameters,
+            param, SqlSyntax.GreaterThan, memtableFB._addedBlocks);
       } else {
-        memtableFB._addedBlocks = setCriteria(
-            pLast,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.LessThanOrEquals,
-            memtableFB._addedBlocks);
+        memtableFB._addedBlocks = setCriteria(pLast, memtableFB.parameters,
+            param, SqlSyntax.LessThanOrEquals, memtableFB._addedBlocks);
       }
     }
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
@@ -610,15 +538,10 @@ class MemTableField extends SearchCriteria {
     memtableFB._addedBlocks = _waitingNot == ''
         ? setCriteria(pValue, memtableFB.parameters, param,
             SqlSyntax.GreaterThan, memtableFB._addedBlocks)
-        : setCriteria(
-            pValue,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.LessThanOrEquals,
-            memtableFB._addedBlocks);
+        : setCriteria(pValue, memtableFB.parameters, param,
+            SqlSyntax.LessThanOrEquals, memtableFB._addedBlocks);
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
@@ -626,36 +549,25 @@ class MemTableField extends SearchCriteria {
   MemTableFilterBuilder lessThan(dynamic pValue) {
     param.expression = '<';
     memtableFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(pValue, memtableFB.parameters, param,
-            SqlSyntax.LessThan, memtableFB._addedBlocks)
-        : setCriteria(
-            pValue,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.GreaterThanOrEquals,
-            memtableFB._addedBlocks);
+        ? setCriteria(pValue, memtableFB.parameters, param, SqlSyntax.LessThan,
+            memtableFB._addedBlocks)
+        : setCriteria(pValue, memtableFB.parameters, param,
+            SqlSyntax.GreaterThanOrEquals, memtableFB._addedBlocks);
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
 
-  MemTableFilterBuilder greaterThanOrEquals(
-      dynamic pValue) {
+  MemTableFilterBuilder greaterThanOrEquals(dynamic pValue) {
     param.expression = '>=';
     memtableFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(
-            pValue,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.GreaterThanOrEquals,
-            memtableFB._addedBlocks)
-        : setCriteria(pValue, memtableFB.parameters, param,
-            SqlSyntax.LessThan, memtableFB._addedBlocks);
+        ? setCriteria(pValue, memtableFB.parameters, param,
+            SqlSyntax.GreaterThanOrEquals, memtableFB._addedBlocks)
+        : setCriteria(pValue, memtableFB.parameters, param, SqlSyntax.LessThan,
+            memtableFB._addedBlocks);
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
@@ -663,17 +575,12 @@ class MemTableField extends SearchCriteria {
   MemTableFilterBuilder lessThanOrEquals(dynamic pValue) {
     param.expression = '<=';
     memtableFB._addedBlocks = _waitingNot == ''
-        ? setCriteria(
-            pValue,
-            memtableFB.parameters,
-            param,
-            SqlSyntax.LessThanOrEquals,
-            memtableFB._addedBlocks)
+        ? setCriteria(pValue, memtableFB.parameters, param,
+            SqlSyntax.LessThanOrEquals, memtableFB._addedBlocks)
         : setCriteria(pValue, memtableFB.parameters, param,
             SqlSyntax.GreaterThan, memtableFB._addedBlocks);
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
@@ -683,12 +590,10 @@ class MemTableField extends SearchCriteria {
         pValue,
         memtableFB.parameters,
         param,
-        SqlSyntax.IN
-            .replaceAll(SqlSyntax.notKeyword, _waitingNot),
+        SqlSyntax.IN.replaceAll(SqlSyntax.notKeyword, _waitingNot),
         memtableFB._addedBlocks);
     _waitingNot = '';
-    memtableFB._addedBlocks
-            .needEndBlock[memtableFB._blockIndex] =
+    memtableFB._addedBlocks.needEndBlock[memtableFB._blockIndex] =
         memtableFB._addedBlocks.retVal;
     return memtableFB;
   }
@@ -710,7 +615,6 @@ class MemTableFilterBuilder extends SearchCriteria {
     _page = 0;
     _obj = obj;
   }
-
   AddedBlocks _addedBlocks;
   int _blockIndex = 0;
   List<DbParameter> parameters;
@@ -748,20 +652,14 @@ class MemTableFilterBuilder extends SearchCriteria {
   }
 
   /// String whereCriteria, write raw query without 'where' keyword. Like this: 'field1 like 'test%' and field2 = 3'
-  MemTableFilterBuilder where(String whereCriteria,
-      {dynamic parameterValue}) {
+  MemTableFilterBuilder where(String whereCriteria, {dynamic parameterValue}) {
     if (whereCriteria != null && whereCriteria != '') {
       final DbParameter param = DbParameter(
           columnName: parameterValue == null ? null : '',
           hasParameter: parameterValue != null);
-      _addedBlocks = setCriteria(
-          parameterValue ?? 0,
-          parameters,
-          param,
-          '($whereCriteria)',
-          _addedBlocks);
-      _addedBlocks.needEndBlock[_blockIndex] =
-          _addedBlocks.retVal;
+      _addedBlocks = setCriteria(parameterValue ?? 0, parameters, param,
+          '($whereCriteria)', _addedBlocks);
+      _addedBlocks.needEndBlock[_blockIndex] = _addedBlocks.retVal;
     }
     return this;
   }
@@ -790,8 +688,7 @@ class MemTableFilterBuilder extends SearchCriteria {
   /// close parentheses
   MemTableFilterBuilder get endBlock {
     if (_addedBlocks.needEndBlock[_blockIndex]) {
-      parameters[parameters.length - 1].whereString +=
-          ' ) ';
+      parameters[parameters.length - 1].whereString += ' ) ';
     }
     _addedBlocks.needEndBlock.removeAt(_blockIndex);
     _addedBlocks.waitingStartBlock.removeAt(_blockIndex);
@@ -879,40 +776,32 @@ class MemTableFilterBuilder extends SearchCriteria {
     return this;
   }
 
-  MemTableField setField(
-      MemTableField field, String colName, DbType dbtype) {
+  MemTableField setField(MemTableField field, String colName, DbType dbtype) {
     return MemTableField(this)
       ..param = DbParameter(
           dbType: dbtype,
           columnName: colName,
-          wStartBlock:
-              _addedBlocks.waitingStartBlock[_blockIndex]);
+          wStartBlock: _addedBlocks.waitingStartBlock[_blockIndex]);
   }
 
   MemTableField _id;
-
   MemTableField get id {
     return _id = setField(_id, 'id', DbType.integer);
   }
 
   MemTableField _name;
-
   MemTableField get name {
     return _name = setField(_name, 'name', DbType.text);
   }
 
   MemTableField _remarks;
-
   MemTableField get remarks {
-    return _remarks =
-        setField(_remarks, 'remarks', DbType.text);
+    return _remarks = setField(_remarks, 'remarks', DbType.text);
   }
 
   MemTableField _isDeleted;
-
   MemTableField get isDeleted {
-    return _isDeleted =
-        setField(_isDeleted, 'isDeleted', DbType.bool);
+    return _isDeleted = setField(_isDeleted, 'isDeleted', DbType.bool);
   }
 
   bool _getIsDeleted;
@@ -941,13 +830,13 @@ class MemTableFilterBuilder extends SearchCriteria {
           if (param.value is Map<String, dynamic> &&
               param.value['sql'] != null) {
             param
-              ..whereString = param.whereString.replaceAll(
-                  '?', param.value['sql'].toString())
+              ..whereString = param.whereString
+                  .replaceAll('?', param.value['sql'].toString())
               ..dbType = DbType.integer
               ..value = param.value['args'];
           }
-          whereString += param.whereString
-              .replaceAll('{field}', param.columnName);
+          whereString +=
+              param.whereString.replaceAll('{field}', param.columnName);
         }
         if (!param.whereString.contains('?')) {
         } else {
@@ -969,12 +858,10 @@ class MemTableFilterBuilder extends SearchCriteria {
             case DbType.datetimeUtc:
               param.value = param.value == null
                   ? null
-                  : (param.value as DateTime)
-                      .millisecondsSinceEpoch;
+                  : (param.value as DateTime).millisecondsSinceEpoch;
               param.value2 = param.value2 == null
                   ? null
-                  : (param.value2 as DateTime)
-                      .millisecondsSinceEpoch;
+                  : (param.value2 as DateTime).millisecondsSinceEpoch;
               break;
             default:
           }
@@ -1017,14 +904,12 @@ class MemTableFilterBuilder extends SearchCriteria {
   /// Deletes List<MemTable> bulk by query
   ///
   /// <returns>BoolResult res.success=Deleted, not res.success=Can not deleted
-  Future<BoolResult> delete(
-      [bool hardDelete = false]) async {
+  Future<BoolResult> delete([bool hardDelete = false]) async {
     _buildParameters();
     var r = BoolResult();
 
     if (MemTable._softDeleteActivated && !hardDelete) {
-      r = await _obj._mnMemTable
-          .updateBatch(qparams, {'isDeleted': 1});
+      r = await _obj._mnMemTable.updateBatch(qparams, {'isDeleted': 1});
     } else {
       r = await _obj._mnMemTable.delete(qparams);
     }
@@ -1036,8 +921,7 @@ class MemTableFilterBuilder extends SearchCriteria {
     _getIsDeleted = true;
     _buildParameters();
     print('SQFENTITIY: recover MemTable bulk invoked');
-    return _obj._mnMemTable
-        .updateBatch(qparams, {'isDeleted': 0});
+    return _obj._mnMemTable.updateBatch(qparams, {'isDeleted': 0});
   }
 
   /// using:
@@ -1079,8 +963,7 @@ class MemTableFilterBuilder extends SearchCriteria {
     final data = await objFuture;
     MemTable obj;
     if (data.isNotEmpty) {
-      obj =
-          MemTable.fromMap(data[0] as Map<String, dynamic>);
+      obj = MemTable.fromMap(data[0] as Map<String, dynamic>);
     } else {
       obj = null;
     }
@@ -1090,12 +973,10 @@ class MemTableFilterBuilder extends SearchCriteria {
   /// This method returns int. [MemTable]
   ///
   /// <returns>int
-  Future<int> toCount(
-      [VoidCallback Function(int c) memtableCount]) async {
+  Future<int> toCount([VoidCallback Function(int c) memtableCount]) async {
     _buildParameters();
     qparams.selectColumns = ['COUNT(1) AS CNT'];
-    final memtablesFuture =
-        await _obj._mnMemTable.toList(qparams);
+    final memtablesFuture = await _obj._mnMemTable.toList(qparams);
     final int count = memtablesFuture[0]['CNT'] as int;
     if (memtableCount != null) {
       memtableCount(count);
@@ -1123,14 +1004,12 @@ class MemTableFilterBuilder extends SearchCriteria {
       bool loadParents = false,
       List<String> loadedFields}) async {
     final data = await toMapList();
-    final List<MemTable> memtablesData =
-        await MemTable.fromMapList(data,
-            preload: preload,
-            preloadFields: preloadFields,
-            loadParents: loadParents,
-            loadedFields: loadedFields,
-            setDefaultValues:
-                qparams.selectColumns == null);
+    final List<MemTable> memtablesData = await MemTable.fromMapList(data,
+        preload: preload,
+        preloadFields: preloadFields,
+        loadParents: loadParents,
+        loadedFields: loadedFields,
+        setDefaultValues: qparams.selectColumns == null);
     return memtablesData;
   }
 
@@ -1167,23 +1046,19 @@ class MemTableFilterBuilder extends SearchCriteria {
   /// retVal['sql'] = SQL statement string, retVal['args'] = whereArguments List<dynamic>;
   ///
   /// <returns>List<String>
-  Map<String, dynamic> toListPrimaryKeySQL(
-      [bool buildParameters = true]) {
-    final Map<String, dynamic> _retVal =
-        <String, dynamic>{};
+  Map<String, dynamic> toListPrimaryKeySQL([bool buildParameters = true]) {
+    final Map<String, dynamic> _retVal = <String, dynamic>{};
     if (buildParameters) {
       _buildParameters();
     }
-    _retVal['sql'] =
-        'SELECT `id` FROM memTable WHERE ${qparams.whereString}';
+    _retVal['sql'] = 'SELECT `id` FROM memTable WHERE ${qparams.whereString}';
     _retVal['args'] = qparams.whereArguments;
     return _retVal;
   }
 
   /// This method returns Primary Key List<int>.
   /// <returns>List<int>
-  Future<List<int>> toListPrimaryKey(
-      [bool buildParameters = true]) async {
+  Future<List<int>> toListPrimaryKey([bool buildParameters = true]) async {
     if (buildParameters) {
       _buildParameters();
     }
@@ -1219,8 +1094,7 @@ class MemTableFilterBuilder extends SearchCriteria {
   ///
   /// Sample usage: await MemTable.select(columnsToSelect: ['columnName']).toListString()
   Future<List<String>> toListString(
-      [VoidCallback Function(List<String> o)
-          listString]) async {
+      [VoidCallback Function(List<String> o) listString]) async {
     _buildParameters();
 
     final objectFuture = _obj._mnMemTable.toList(qparams);
@@ -1229,8 +1103,7 @@ class MemTableFilterBuilder extends SearchCriteria {
     final data = await objectFuture;
     final int count = data.length;
     for (int i = 0; i < count; i++) {
-      objectsData.add(
-          data[i][qparams.selectColumns[0]].toString());
+      objectsData.add(data[i][qparams.selectColumns[0]].toString());
     }
     if (listString != null) {
       listString(objectsData);
@@ -1243,33 +1116,25 @@ class MemTableFilterBuilder extends SearchCriteria {
 // region MemTableFields
 class MemTableFields {
   static TableField _fId;
-
   static TableField get id {
-    return _fId = _fId ??
-        SqlSyntax.setField(_fId, 'id', DbType.integer);
+    return _fId = _fId ?? SqlSyntax.setField(_fId, 'id', DbType.integer);
   }
 
   static TableField _fName;
-
   static TableField get name {
-    return _fName = _fName ??
-        SqlSyntax.setField(_fName, 'name', DbType.text);
+    return _fName = _fName ?? SqlSyntax.setField(_fName, 'name', DbType.text);
   }
 
   static TableField _fRemarks;
-
   static TableField get remarks {
-    return _fRemarks = _fRemarks ??
-        SqlSyntax.setField(
-            _fRemarks, 'remarks', DbType.text);
+    return _fRemarks =
+        _fRemarks ?? SqlSyntax.setField(_fRemarks, 'remarks', DbType.text);
   }
 
   static TableField _fIsDeleted;
-
   static TableField get isDeleted {
     return _fIsDeleted = _fIsDeleted ??
-        SqlSyntax.setField(
-            _fIsDeleted, 'isDeleted', DbType.integer);
+        SqlSyntax.setField(_fIsDeleted, 'isDeleted', DbType.integer);
   }
 }
 // endregion MemTableFields

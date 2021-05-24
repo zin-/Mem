@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sqfentity/sqfentity.dart';
 import 'package:sqfentity_gen/sqfentity_gen.dart';
 
-part 'database.g.dart';
+part 'models.g.dart';
 
 @SqfEntityBuilder(memDbModel)
 const memDbModel = SqfEntityModel(

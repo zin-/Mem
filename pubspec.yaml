@@ -30,6 +30,9 @@ dev_dependencies:
   build_runner: ^1.6.5
   build_verify: ^1.1.0
 
+  # for Unit test
+  mockito: ^5.0.7
+
 flutter:
   uses-material-design: true
 

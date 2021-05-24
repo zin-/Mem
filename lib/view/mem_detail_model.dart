@@ -10,8 +10,9 @@ class MemDetailModel extends StateNotifier<Mem> {
     state = await MemService().fetchByIdIs(memId);
   }
 
-  void save() async {
+  Future<Mem> save() async {
     state = await MemService().save(state);
+    return state;
   }
 }
 

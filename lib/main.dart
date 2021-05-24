@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mem/app.dart';
-import 'package:mem/model/database.dart';
+import 'package:mem/database/models.dart';
 
 void main() async {
-  log('main');
   WidgetsFlutterBinding.ensureInitialized();
   final bool dbIsInitialized =
       await MemDbModel().initializeDB();
