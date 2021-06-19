@@ -35,6 +35,7 @@ class MemDetail extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        key: Key('save_fab'),
         child: Icon(Icons.save_alt),
         onPressed: () async {
           if (_formKey.currentState.validate()) {

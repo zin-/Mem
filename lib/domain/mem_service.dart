@@ -18,8 +18,12 @@ class MemService {
 
   Future<Mem> fetchByIdIs(int memId) async {
     print("fetchByIdIs(memId: $memId)");
+    print('1');
+    final memTable = await _memDao.selectWhereId(memId);
+    print('2');
+    print(memTable?.toString());
     final fetchedMem = Mem.fromEntity(
-      await _memDao.selectWhereId(memId) ?? MemTable(),
+      memTable ?? MemTable(),
     );
     print("fetchedMem: ${fetchedMem?.toString()}");
     return fetchedMem;
