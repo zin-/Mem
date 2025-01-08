@@ -121,8 +121,7 @@ void main() => group(
                   "6:00 AM",
                 );
                 expect(
-                  (await PreferenceRepository().shipByKey(startOfDayKey))
-                      .value,
+                  (await PreferenceRepository().shipByKey(startOfDayKey)).value,
                   TimeOfDay(hour: 6, minute: 0),
                 );
               },
@@ -203,8 +202,7 @@ void main() => group(
           () {
             setUp(
               () async {
-                await PreferenceRepository()
-                    .discard(notifyAfterInactivity);
+                await PreferenceRepository().discard(notifyAfterInactivity);
               },
             );
 
