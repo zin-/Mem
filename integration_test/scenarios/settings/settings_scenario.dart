@@ -299,78 +299,75 @@ void main() => group(
               },
             );
 
-            testWidgets(
-              "Remove.",
-              (widgetTester) async {
-                widgetTester.clearAllMockMethodCallHandler();
-
-                int alarmServiceStartCount = 0;
-                int alarmCancelCount = 0;
-                widgetTester.setMockMethodCallHandler(
-                  MethodChannelMock.androidAlarmManager,
-                  [
-                    (m) async {
-                      expect(m.method, equals('AlarmService.start'));
-                      alarmServiceStartCount++;
-                      return true;
-                    },
-                    (m) async {
-                      expect(m.method, equals('Alarm.cancel'));
-                      alarmCancelCount++;
-                      return true;
-                    },
-                  ],
+            group(
+              "With saved",
+              () {
+                setUp(
+                  () async {
+                    await PreferenceRepository()
+                        .receive(PreferenceEntity(notifyAfterInactivity, 3600));
+                  },
                 );
 
-                await runApplication();
-                await widgetTester.pumpAndSettle();
-                await widgetTester.tap(drawerIconFinder);
-                await widgetTester.pumpAndSettle();
-                await widgetTester.tap(find.text(l10n.settingsPageTitle));
-                await widgetTester.pumpAndSettle();
-                await widgetTester
-                    .tap(find.text(l10n.notifyAfterInactivityLabel));
-                await widgetTester.pumpAndSettle();
-                await widgetTester.tap(find.text(l10n.okAction));
-                await widgetTester.pumpAndSettle();
+                testWidgets(
+                  "Remove.",
+                  (widgetTester) async {
+                    widgetTester.clearAllMockMethodCallHandler();
 
-                expect(
-                  await PreferenceRepository()
-                      .shipByKey(notifyAfterInactivity)
-                      .then(
-                        (v) => v.value,
+                    int alarmServiceStartCount = 0;
+                    int alarmCancelCount = 0;
+                    widgetTester.setMockMethodCallHandler(
+                      MethodChannelMock.androidAlarmManager,
+                      [
+                        (m) async {
+                          expect(m.method, equals('AlarmService.start'));
+                          alarmServiceStartCount++;
+                          return true;
+                        },
+                        (m) async {
+                          expect(m.method, equals('Alarm.cancel'));
+                          alarmCancelCount++;
+                          return true;
+                        },
+                      ],
+                    );
+
+                    await runApplication();
+                    await widgetTester.pumpAndSettle();
+                    await widgetTester.tap(drawerIconFinder);
+                    await widgetTester.pumpAndSettle();
+                    await widgetTester.tap(find.text(l10n.settingsPageTitle));
+                    await widgetTester.pumpAndSettle();
+                    await widgetTester
+                        .tap(find.text(l10n.notifyAfterInactivityLabel));
+                    await widgetTester.pumpAndSettle();
+                    await widgetTester.tap(find.text(l10n.cancelAction));
+                    await widgetTester.pumpAndSettle();
+
+                    expect(
+                      await PreferenceRepository()
+                          .shipByKey(notifyAfterInactivity)
+                          .then(
+                            (v) => v.value,
+                          ),
+                      isNull,
+                    );
+
+                    expect(
+                      alarmServiceStartCount,
+                      equals(
+                        defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
                       ),
-                  isNotNull,
-                );
-
-                await widgetTester
-                    .tap(find.text(l10n.notifyAfterInactivityLabel));
-                await widgetTester.pumpAndSettle();
-                await widgetTester.tap(find.text(l10n.cancelAction));
-                await widgetTester.pumpAndSettle();
-
-                expect(
-                  await PreferenceRepository()
-                      .shipByKey(notifyAfterInactivity)
-                      .then(
-                        (v) => v.value,
+                      reason: 'alarmServiceStartCount',
+                    );
+                    expect(
+                      alarmCancelCount,
+                      equals(
+                        defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
                       ),
-                  isNull,
-                );
-
-                expect(
-                  alarmServiceStartCount,
-                  equals(
-                    defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
-                  ),
-                  reason: 'alarmServiceStartCount',
-                );
-                expect(
-                  alarmCancelCount,
-                  equals(
-                    defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
-                  ),
-                  reason: 'alarmCancelCount',
+                      reason: 'alarmCancelCount',
+                    );
+                  },
                 );
               },
             );
