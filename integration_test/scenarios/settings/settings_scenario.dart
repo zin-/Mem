@@ -227,13 +227,21 @@ void main() => group(
             testWidgets(
               "Save.",
               (widgetTester) async {
+                widgetTester.clearAllMockMethodCallHandler();
+
                 int alarmServiceStartCount = 0;
+                int alarmOneShotAtCount = 0;
                 widgetTester.setMockMethodCallHandler(
                   MethodChannelMock.androidAlarmManager,
                   [
                     (m) async {
                       expect(m.method, equals('AlarmService.start'));
                       alarmServiceStartCount++;
+                      return true;
+                    },
+                    (m) async {
+                      expect(m.method, equals('Alarm.oneShotAt'));
+                      alarmOneShotAtCount++;
                       return true;
                     },
                   ],
@@ -281,19 +289,34 @@ void main() => group(
                   ),
                   reason: 'alarmServiceStartCount',
                 );
+                expect(
+                  alarmOneShotAtCount,
+                  equals(
+                    defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
+                  ),
+                  reason: 'alarmOneShotAtCount',
+                );
               },
             );
 
             testWidgets(
               "Remove.",
               (widgetTester) async {
+                widgetTester.clearAllMockMethodCallHandler();
+
                 int alarmServiceStartCount = 0;
+                int alarmCancelCount = 0;
                 widgetTester.setMockMethodCallHandler(
                   MethodChannelMock.androidAlarmManager,
                   [
                     (m) async {
                       expect(m.method, equals('AlarmService.start'));
                       alarmServiceStartCount++;
+                      return true;
+                    },
+                    (m) async {
+                      expect(m.method, equals('Alarm.cancel'));
+                      alarmCancelCount++;
                       return true;
                     },
                   ],
@@ -341,6 +364,13 @@ void main() => group(
                     defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
                   ),
                   reason: 'alarmServiceStartCount',
+                );
+                expect(
+                  alarmCancelCount,
+                  equals(
+                    defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
+                  ),
+                  reason: 'alarmCancelCount',
                 );
               },
             );
