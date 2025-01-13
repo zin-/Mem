@@ -6,6 +6,7 @@ import 'package:mem/databases/definition.dart';
 import 'package:mem/databases/table_definitions/base.dart';
 import 'package:mem/databases/table_definitions/mems.dart';
 import 'package:mem/framework/database/accessor.dart';
+import 'package:mem/framework/date_and_time/seconds_of_time_picker.dart';
 import 'package:mem/logger/log.dart';
 import 'package:mem/logger/log_service.dart';
 import 'package:mem/mems/mem.dart';
@@ -18,6 +19,7 @@ import 'package:mem/notifications/notification_client.dart';
 import 'package:mem/notifications/notification/type.dart';
 import 'package:mem/notifications/notification_ids.dart';
 import 'package:mem/settings/preference/client.dart';
+import 'package:mem/settings/preference/repository.dart';
 import 'package:mem/settings/preference/preference.dart';
 import 'package:mem/settings/preference/keys.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -81,7 +83,7 @@ void main() => group(
           'Start of day',
           () {
             setUp(() async {
-              await PreferenceClientRepository().discard(startOfDayKey);
+              await PreferenceRepository().discard(startOfDayKey);
             });
 
             testWidgets(
@@ -120,8 +122,7 @@ void main() => group(
                   "6:00 AM",
                 );
                 expect(
-                  (await PreferenceClientRepository().shipByKey(startOfDayKey))
-                      .value,
+                  (await PreferenceRepository().shipByKey(startOfDayKey)).value,
                   TimeOfDay(hour: 6, minute: 0),
                 );
               },
@@ -132,7 +133,7 @@ void main() => group(
               () {
                 final now = DateTime.now();
                 setUp(() async {
-                  await PreferenceClientRepository().receive(PreferenceEntity(
+                  await PreferenceRepository().receive(PreferenceEntity(
                       startOfDayKey, TimeOfDay.fromDateTime(now)));
 
                   final savedMem = await MemRepositoryV2().receive(MemEntityV2(
@@ -190,6 +191,185 @@ void main() => group(
                     expect(texts.elementAt(0).data, equals(dateText(now)));
                     expect(texts.elementAt(3).data,
                         equals(dateText(now.add(Duration(days: 1)))));
+                  },
+                );
+              },
+            );
+          },
+        );
+
+        group(
+          "Notify after inactivity",
+          () {
+            setUp(
+              () async {
+                await PreferenceRepository().discard(notifyAfterInactivity);
+              },
+            );
+
+            testWidgets(
+              "Show.",
+              (widgetTester) async {
+                await runApplication();
+                await widgetTester.pumpAndSettle();
+                await widgetTester.tap(drawerIconFinder);
+                await widgetTester.pumpAndSettle();
+                await widgetTester.tap(find.text(l10n.settingsPageTitle));
+                await widgetTester.pumpAndSettle();
+
+                final texts = widgetTester.widgetList<Text>(find.byType(Text));
+                expect(
+                  texts.elementAt(2).data,
+                  equals(l10n.notifyAfterInactivityLabel),
+                );
+              },
+            );
+
+            testWidgets(
+              "Save.",
+              (widgetTester) async {
+                widgetTester.clearAllMockMethodCallHandler();
+
+                int alarmServiceStartCount = 0;
+                int alarmOneShotAtCount = 0;
+                widgetTester.setMockMethodCallHandler(
+                  MethodChannelMock.androidAlarmManager,
+                  [
+                    (m) async {
+                      expect(m.method, equals('AlarmService.start'));
+                      alarmServiceStartCount++;
+                      return true;
+                    },
+                    (m) async {
+                      expect(m.method, equals('Alarm.oneShotAt'));
+                      alarmOneShotAtCount++;
+                      return true;
+                    },
+                  ],
+                );
+
+                await runApplication();
+                await widgetTester.pumpAndSettle();
+                await widgetTester.tap(drawerIconFinder);
+                await widgetTester.pumpAndSettle();
+                await widgetTester.tap(find.text(l10n.settingsPageTitle));
+                await widgetTester.pumpAndSettle();
+
+                const secondsOfHour = 3600;
+                final texts = widgetTester.widgetList<Text>(find.byType(Text));
+                expect(
+                  texts.elementAt(3).data,
+                  isNot(equals(formatSecondsOfTime(secondsOfHour))),
+                );
+
+                await widgetTester
+                    .tap(find.text(l10n.notifyAfterInactivityLabel));
+                await widgetTester.pumpAndSettle();
+                await widgetTester.tap(find.text(l10n.okAction));
+                await widgetTester.pumpAndSettle();
+
+                final texts2 = widgetTester.widgetList<Text>(find.byType(Text));
+                expect(
+                  texts2.elementAt(3).data,
+                  equals(formatSecondsOfTime(secondsOfHour)),
+                );
+
+                expect(
+                  await PreferenceRepository()
+                      .shipByKey(notifyAfterInactivity)
+                      .then(
+                        (v) => v.value,
+                      ),
+                  equals(secondsOfHour),
+                );
+
+                expect(
+                  alarmServiceStartCount,
+                  equals(
+                    defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
+                  ),
+                  reason: 'alarmServiceStartCount',
+                );
+                expect(
+                  alarmOneShotAtCount,
+                  equals(
+                    defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
+                  ),
+                  reason: 'alarmOneShotAtCount',
+                );
+              },
+            );
+
+            group(
+              "With saved",
+              () {
+                setUp(
+                  () async {
+                    await PreferenceRepository()
+                        .receive(PreferenceEntity(notifyAfterInactivity, 3600));
+
+                    PreferenceClient.resetSingleton();
+                  },
+                );
+
+                testWidgets(
+                  "Remove.",
+                  (widgetTester) async {
+                    widgetTester.clearAllMockMethodCallHandler();
+
+                    int alarmServiceStartCount = 0;
+                    int alarmCancelCount = 0;
+                    widgetTester.setMockMethodCallHandler(
+                      MethodChannelMock.androidAlarmManager,
+                      [
+                        (m) async {
+                          expect(m.method, equals('AlarmService.start'));
+                          alarmServiceStartCount++;
+                          return true;
+                        },
+                        (m) async {
+                          expect(m.method, equals('Alarm.cancel'));
+                          alarmCancelCount++;
+                          return true;
+                        },
+                      ],
+                    );
+
+                    await runApplication();
+                    await widgetTester.pumpAndSettle();
+                    await widgetTester.tap(drawerIconFinder);
+                    await widgetTester.pumpAndSettle();
+                    await widgetTester.tap(find.text(l10n.settingsPageTitle));
+                    await widgetTester.pumpAndSettle();
+                    await widgetTester
+                        .tap(find.text(l10n.notifyAfterInactivityLabel));
+                    await widgetTester.pumpAndSettle();
+                    await widgetTester.tap(find.text(l10n.cancelAction));
+                    await widgetTester.pumpAndSettle();
+
+                    expect(
+                      await PreferenceRepository()
+                          .shipByKey(notifyAfterInactivity)
+                          .then(
+                            (v) => v.value,
+                          ),
+                      isNull,
+                    );
+
+                    expect(
+                      alarmServiceStartCount,
+                      equals(
+                        defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
+                      ),
+                      reason: 'alarmServiceStartCount',
+                    );
+                    expect(
+                      alarmCancelCount,
+                      equals(
+                        defaultTargetPlatform == TargetPlatform.android ? 1 : 0,
+                      ),
+                      reason: 'alarmCancelCount',
+                    );
                   },
                 );
               },

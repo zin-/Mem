@@ -9,7 +9,7 @@ import 'package:mem/mems/mem_entity.dart';
 import 'package:mem/mems/mem_notification_entity.dart';
 import 'package:mem/mems/mem_notification_repository.dart';
 import 'package:mem/mems/mem_repository.dart';
-import 'package:mem/settings/preference/client.dart';
+import 'package:mem/settings/preference/repository.dart';
 import 'package:mem/settings/preference/keys.dart';
 import 'package:mem/values/constants.dart';
 
@@ -26,7 +26,7 @@ class NotificationClient {
 
   final ScheduleClient _scheduleClient;
   final NotificationRepository _notificationRepository;
-  final PreferenceClientRepository _preferenceClientRepository;
+  final PreferenceRepository _preferenceClientRepository;
   final MemRepositoryV2 _memRepository;
   final MemNotificationRepositoryV2 _memNotificationRepository;
 
@@ -46,7 +46,7 @@ class NotificationClient {
           NotificationChannels(buildL10n(context)),
           ScheduleClient(),
           NotificationRepository(),
-          PreferenceClientRepository(),
+          PreferenceRepository(),
           MemRepositoryV2(),
           MemNotificationRepositoryV2(),
         ),
@@ -69,50 +69,54 @@ class NotificationClient {
 
   Future<void> show(
     NotificationType notificationType,
-    int memId,
+    int? memId,
   ) =>
       v(
         () async {
-          final savedMem =
-              await _memRepository.ship(id: memId).then((v) => v.singleOrNull);
+          if (memId != null) {
+            final savedMem = await _memRepository
+                .ship(id: memId)
+                .then((v) => v.singleOrNull);
 
-          if (savedMem == null ||
-              savedMem.value.isDone ||
-              savedMem.value.isArchived) {
-            await cancelMemNotifications(memId);
-            return;
-          }
-
-          if (notificationType == NotificationType.repeat) {
-            if (!await _shouldNotify(memId)) {
+            if (savedMem == null ||
+                savedMem.value.isDone ||
+                savedMem.value.isArchived) {
+              await cancelMemNotifications(memId);
               return;
             }
-          }
 
-          if (notificationType == NotificationType.startMem) {
-            final latestAct = await ActRepository()
-                .ship(memId: memId, latestByMemIds: true)
-                .then(
-                  (v) => v.singleOrNull?.value,
-                );
-            if (latestAct != null && latestAct.isActive) {
-              return;
+            if (notificationType == NotificationType.repeat) {
+              if (!await _shouldNotify(memId)) {
+                return;
+              }
             }
-          }
 
-          await Future.wait(NotificationType.values
-              .where(
-                (e) => e != NotificationType.activeAct && e != notificationType,
-              )
-              .map(
-                (e) => _notificationRepository
-                    .discard(e.buildNotificationId(memId)),
-              ));
-          if (notificationType == NotificationType.activeAct ||
-              notificationType == NotificationType.pausedAct ||
-              notificationType == NotificationType.afterActStarted) {
-            await _notificationRepository
-                .discard(NotificationType.activeAct.buildNotificationId(memId));
+            if (notificationType == NotificationType.startMem) {
+              final latestAct = await ActRepository()
+                  .ship(memId: memId, latestByMemIds: true)
+                  .then(
+                    (v) => v.singleOrNull?.value,
+                  );
+              if (latestAct != null && latestAct.isActive) {
+                return;
+              }
+            }
+
+            await Future.wait(NotificationType.values
+                .where(
+                  (e) =>
+                      e != NotificationType.activeAct && e != notificationType,
+                )
+                .map(
+                  (e) => _notificationRepository
+                      .discard(e.buildNotificationId(memId)),
+                ));
+            if (notificationType == NotificationType.activeAct ||
+                notificationType == NotificationType.pausedAct ||
+                notificationType == NotificationType.afterActStarted) {
+              await _notificationRepository.discard(
+                  NotificationType.activeAct.buildNotificationId(memId));
+            }
           }
 
           await _notificationRepository.receive(
